@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ppkd_b6/day_7/row.dart';
+import 'package:ppkd_b6/day_8/container.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           // Warna.biru
         ),
       ),
-      home: RowDay7(),
+      home: ContainerDay8(),
     );
   }
 }
