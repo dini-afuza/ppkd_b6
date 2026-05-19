@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ppkd_b6/day_12/state_simple.dart';
+import 'package:ppkd_b6/day_13/navigator.dart';
+import 'package:ppkd_b6/day_13/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +35,12 @@ class MyApp extends StatelessWidget {
           // Warna.biru
         ),
       ),
-      home: StateDay12(),
+      initialRoute: "/",
+      routes: {
+        '/': (context) => SplashScreenDay13(),
+        '/login': (context) => NavigatorDay13(),
+      },
+      // home: NavigatorDay13(),
     );
   }
 }
