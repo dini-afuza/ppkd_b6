@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:ppkd_b6/day_13/navigator.dart';
 import 'package:ppkd_b6/day_19/database/preference_handler.dart';
-import 'package:ppkd_b6/day_19/views/splash_screen.dart';
+import 'package:ppkd_b6/tugas14.dart';
+import 'package:ppkd_b6/tugas14/tugas14_login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,17 +37,19 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: .fromSeed(
+        colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 177, 12, 12),
           // Warna.biru
         ),
       ),
-      initialRoute: "/",
-      routes: {
-        '/': (context) => SplashScreenDay19(),
-        '/login': (context) => NavigatorDay13(),
-      },
-      // home: NavigatorDay13(),
+      // initialRoute: "/",
+      // routes: {
+      //   '/': (context) => SplashScreenDay19(),
+      //   '/login': (context) => NavigatorDay13(),
+      // },
+      home: PreferenceHandler.isLogin
+          ? const Tugas14Screen()
+          : const Tugas14LoginScreen(),
     );
   }
 }
