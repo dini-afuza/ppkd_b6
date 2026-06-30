@@ -1,0 +1,121 @@
+import 'package:flutter/material.dart';
+import 'package:ppkd_b6/constant/app_color.dart';
+import 'package:ppkd_b6/day_33_35_tugas15/models/post_models.dart';
+import 'package:ppkd_b6/day_33_35_tugas15/services/api_services.dart';
+import 'package:ppkd_b6/day_33_35_tugas15/services/dio_client.dart';
+
+class PostListScreenDay33 extends StatefulWidget {
+  const PostListScreenDay33({super.key});
+
+  @override
+  State<PostListScreenDay33> createState() => _PostListScreenDay33State();
+}
+
+class _PostListScreenDay33State extends State<PostListScreenDay33> {
+  late final ApiService _apiService;
+  late Future<List<PostModels>> _postsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final dio = createDioClient();
+    _apiService = ApiService(dio);
+    _postsFuture = _apiService.getAllPosts();
+  }
+
+  void _refreshPosts() {
+    setState(() {
+      _postsFuture = _apiService.getAllPosts();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('API', style: TextStyle(color: Colors.white)),
+        backgroundColor: AppColor.primaryColor,
+        // iconTheme: const IconThemeData(color: Colors.white),
+      ), // AppBar
+      body: FutureBuilder<List<PostModels>>(
+        future: _postsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.wifi_off, size: 64, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Gagal memuat data:\n${snapshot.error}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.grey),
+                    ), // Text
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _refreshPosts,
+                      child: const Text('Coba Lagi'),
+                    ), // ElevatedButton
+                  ],
+                ), // Column
+              ), // Padding
+            ); // Center
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Tidak ada data post.'));
+          }
+
+          final posts = snapshot.data!;
+
+          return RefreshIndicator(
+            onRefresh: () async => _refreshPosts(),
+            child: ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ), // EdgeInsets.symmetric
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: AppColor.primaryColor,
+                      child: Text(
+                        '${post.id}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ), // TextStyle
+                      ), // Text
+                    ), // CircleAvatar
+                    title: Text(
+                      post.title ?? "",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ), // Text
+                    subtitle: Text(
+                      post.body ?? "",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ), // Text
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  ), // ListTile
+                ); // Card
+              },
+            ), // ListView.builder
+          ); // RefreshIndicator
+        },
+      ), // FutureBuilder
+    ); // Scaffold
+  }
+}

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:ppkd_b6/day_19/database/preference_handler.dart';
-import 'package:ppkd_b6/tugas14.dart';
-import 'package:ppkd_b6/tugas14/tugas14_login_screen.dart';
+import 'package:ppkd_b6/day_33_35_tugas15/views/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +46,7 @@ class MyApp extends StatelessWidget {
       //   '/': (context) => SplashScreenDay19(),
       //   '/login': (context) => NavigatorDay13(),
       // },
-      home: PreferenceHandler.isLogin
-          ? const Tugas14Screen()
-          : const Tugas14LoginScreen(),
+      home: const LoginScreen(),
     );
   }
 }
